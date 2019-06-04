@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>promise</title>
+</head>
+<body>
+    <script>
+        var Promise = (function() {
+            var PADDING = "PADDING";
+            var RESOLVE = 'RESOLVE';
+            var REJECT = 'REJECT';
+            var Promise = function(fn) {
+                this.callback = [];
+                this.state = PADDING;
+                var that = this;
+                function resolve() {
+                    this.state = RESOLVE;
+                    for(var i = 0; i < that.callback.length; i++) {
+                        that.callback[i]();
+                    }
+                }
+                function reject() {
+                    this.state = REJECT;
+                    for(var i = 0; i < that.callback.length; i++) {
+                        that.callback();
+                    }
+                }
+                try {
+                    fn(resolve, reject);
+                } catch (error) {
+                    reject();
+                }
+            };
+            Promise.prototype.then = function(fn) {
+                if(this.state === PADDING) {
+                    this.callback.push(fn);
+                    return this;
+                }
+                fn();
+                return this;
+            }
+            return Promise;
+        })()
+        var p = new Promise(function(resolve, reject) {
+            setTimeout(function() {
+                resolve('done')
+            }, 1000);
+        }).then(function(res) {
+            console.log('then1', res);
+        }).then(function(res) {
+            console.log('then2', res);
+        })
+        p.then(function(res) {
+            console.log('then3', res);
+        }).then(function(res) {
+            console.log('then4', res);
+        })
+    </script>
+</body>
+</html>
+
+
+
+
+

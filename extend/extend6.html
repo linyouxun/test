@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>extend</title>
+</head>
+<body>
+    <script>
+        function _extend(b ,d) {
+            function __() {
+                this.constructor = b;
+            }
+            __.prototype = d.prototype;
+            b.prototype = new __();
+        }
+
+        var A = (function() {
+            function A(name) {
+                this.name = name;
+            }
+            A.prototype.getName = function() {
+                return this.name;
+            }
+            return A;
+        })()
+        var B = (function(_super) {
+            this._extend(B, _super);
+            function B(name, age) {
+                this.age = age;
+                this.name = name;
+            }
+            B.prototype.getAge = function() {
+                return this.age;
+            }
+            return B;
+        })(A)
+
+        var a = new A('lyx');
+        var b = new B('lyx', 18);
+        console.log(a, b);
+    </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>promise study 2</title>
+</head>
+<body>
+    <script>
+        
+        var MyPromise = function(fn) {
+            var value = null;
+            var callbacks = [];
+            this.then = function(onFulFilled) {
+                console.log('then');
+                callbacks.push(onFulFilled);
+                return this;
+            }
+            function resolve(value) {
+                console.log('resolve');
+                setTimeout(() => {
+                    callbacks.map(function(cb){
+                        cb(value);
+                    });
+                }, 0);
+            }
+            fn(resolve);
+        }
+
+        function getUserId() {
+            return new MyPromise((resolve) => {
+                resolve(1234)
+            })
+        }
+
+        getUserId().then((name) => {
+            console.log(1, name);
+        }).then((name2) => {
+            console.log(2, name2);
+        })
+    
+    </script>
+</body>
+</html>

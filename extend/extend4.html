@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>extend4</title>
+</head>
+<body>
+    <script>
+        (function() {
+            var initializing = false;
+            this.Class = function() {};
+            Class.extend = function(props) {
+                var _super = this.prototype;
+                initializing = true;
+                var prototype = new this();
+                initializing = false;
+                for(var name in props) {
+                    if (typeof props[name] === 'function' && typeof _super[name] === 'function') {
+                        prototype[name] = (function(name, fn) {
+                            return function() {
+                                var tmp = this._super;
+                                this._super = _super[name];
+                                var ret = fn.apply(this, arguments);
+                                this._super = tmp;
+                                return ret;
+                            }
+                        })(name, props[name]);
+                    } else {
+                        prototype[name] = props[name];
+                    }
+                }
+                function Class() {
+                    if (!initializing && this.init) {
+                        this.init.apply(this, arguments);
+                    }
+                }
+                Class.prototype = prototype;
+                Class.prototype.constructor = Class;
+                Class.extend = arguments.callee;
+                return Class;
+            }
+        })()
+        var Person = Class.extend({
+            init: function(name, age) {
+                console.log('person init')
+                this.name = name;
+                this.age = age;
+            },
+            getName: function() {
+                console.log('person getname');
+                return this.name;
+            }
+        })
+        var p = new Person('lyx', 18);
+        var Man = Person.extend({
+            init: function(name, age, sex) {
+                console.log('man init')
+                this._super(name, age);
+                this.sex = sex;
+            },
+            getName: function() {
+                console.log('man getname');
+                return this._super();
+            },
+            getSex: function() {
+                return this.sex;
+            }
+        })
+        var man = new Man('man', 18, '男');
+        console.log(man, p);
+    
+    </script>
+</body>
+</html>

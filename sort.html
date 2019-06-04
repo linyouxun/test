@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <a href="./sb.html">ssss</a>
+    <script>
+        var nums = [1, 34, 6, 2, 5, 3, 8, 234, 78, 34, 9, 34, 4];
+        var len = nums.length;
+        var sort = function(nums, left, right) {
+            if (left < right) {
+                var l = left, r = right, flat = nums[left];
+                while(l < r) {
+                    while(l < r && flat <= nums[r]) r--;
+                    nums[l] = nums[r];
+                    while(l < r && flat >= nums[l]) l++;
+                    nums[r] = nums[l]
+                }
+                nums[l] = flat;
+                sort(nums, left, l - 1);
+                sort(nums, l + 1, right);
+            }
+            return nums;
+        }
+        var n = sort(nums, 0, len - 1);
+        console.log(n);
+
+
+        /**
+         * 冒泡
+         */
+        // var sort = function(nums) {
+            // var len = nums.length;
+            // for(var i = 0; i < len; i++) {
+                // for(var j = 1; j < len - i; j++) {
+                    // if(nums[j - 1] > nums[j]) {
+                        // var temp = nums[j -1];
+                        // nums[j - 1] = nums[j];
+                        // nums[j] = temp;
+                    // }
+                // }
+                // console.log('sort', i, nums)
+            // }
+            // return nums;
+        // }
+        // var nums = [1, 34, 6, 2, 5, 3, 8, 234, 78, 34, 9, 34, 4];
+        // var n = sort(nums);
+        // console.log(n);
+        // var sort2 = function(nums) {
+            // var len = nums.length;
+            // for(var i = 0; i < len; i++) {
+                // for(var j = i + 1; j < len; j++) {
+                    // if (nums[i] > nums[j]) {
+                        // var temp = nums[i];
+                        // nums[i] = nums[j];
+                        // nums[j] = temp;
+                    // }
+                // }
+                // console.log('sort2', i, nums)
+            // }
+            // return nums;
+        // }
+        // var nums2 = [1, 34, 6, 2, 5, 3, 8, 234, 78, 34, 9, 34, 4];
+        // console.log(sort2(nums2));
+        // var sort3 = function(nums, left, right) {
+        //     var l = left, r = right;
+        //     if(left < right) {
+        //         var flat = nums[left];                
+        //         while(left < right) {
+        //             while(left < right && flat <= nums[right]) right--;
+        //             nums[left] = nums[right];
+        //             while(left < right && flat >= nums[left]) left++;
+        //             nums[right] = nums[left];
+        //         }
+        //         nums[left] = flat;
+        //         console.log('sort3', nums);
+        //         sort3(nums, l, left - 1);
+        //         sort3(nums, left + 1, r);
+        //     }
+        //     return nums;
+        // }
+        // var nums3 = [1, 34, 6, 2, 5, 3, 8, 234, 78, 34, 9, 34, 4];
+        // console.log(nums3);
+        // console.log(sort3(nums3, 0, nums3.length - 1));
+
+        // var sort4 = function(nums) {
+            // var len = nums.length;
+            // for(var i = 1; i < len; i++) {
+                // var temp = nums[i]; 
+                // for(var j = i - 1; j >= 0; j--) {
+                    // if(temp < nums[j]) {
+                        // nums[j + 1] = nums[j];
+                    // } else {
+                        // nums[j + 1] = temp;
+                        // break;
+                    // }
+                // }
+                // console.log('sort4', i, nums);
+            // }
+            // return nums;
+        // }
+        // var nums4 = [1, 34, 6, 2, 5, 3, 8, 234, 78, 34, 9, 34, 4];
+        // console.log(sort4(nums4));
+    </script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>css</title>
+    <style>
+        /* .context {
+            width: 500px;
+            height: 500px;
+            background-color: lightgray;
+            display: inline-block;
+            position: relative;
+        }
+        .center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        } */
+
+        /* .context {
+            display: table-cell;
+            width: 500px;
+            height: 500px;
+            background-color: lightgray;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .center {
+
+        } */
+
+        /* .context {
+            display: -webkit-box;
+            display: box;
+            -webkit-box-orient: vertical;
+            -webkit-box-pack: center;
+            box-orient: vertical;
+            box-pack: center;
+            width: 500px;
+            height: 500px;
+            background-color: lightgray;
+        }
+        .center {
+            margin: 0 auto;
+            text-align: center;
+        } */
+
+
+        /* .context {
+            width: 500px;
+            height: 500px;
+            background-color: lightgray;
+            display: flex;
+            align-content: center;
+            justify-content: center;
+        }
+        .center {
+            margin: auto;
+        } */
+        .context {
+            display: table;
+            width: 500px;
+            height: 500px;
+            background-color: lightgray;
+            /* text-align: center; */
+        }
+        .center {
+            display: table-cell;
+            vertical-align: middle;
+            margin: 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="context">
+        <div class="center">水平垂直居中</div>
+    </div>
+</body>
+</html>

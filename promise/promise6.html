@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>promise6</title>
+</head>
+<body>
+    <script>
+    
+        var MyPromise = (function() {
+            var STATE = {
+                pendding: 'pendding',
+                fulfilled: 'fulfilled',
+            }
+            var Promise = function(fn) {
+                var values, callbacks = [], state = STATE.pendding;
+                this.then = function(cb) {
+                    switch(state) {
+                        case STATE.pendding: {
+                            callbacks.push(cb);
+                            break;
+                        }
+                        case STATE.fulfilled: {
+                            cb()
+                            break;
+                        }
+                    }
+                    return this;
+                }
+                function resolve() {
+                    state = STATE.fulfilled;
+                    setTimeout(function() {
+                        for (let index = 0; index < callbacks.length; index++) {
+                            const cb = callbacks[index];
+                            if (cb instanceof Promise) {
+                                for (let index2 = index + 1; index2 < callbacks.length; index2++) {
+                                    const cb2 = callbacks[index2];
+                                    cb.then(cb2);
+                                }
+                            } else {
+                                cb();
+                            }
+                        }
+                    }, 0)
+                }
+                fn(resolve);
+            }
+            return Promise;
+        })()
+
+        var promise = new MyPromise(function(resolve) {
+            setTimeout(function() {
+                // promise.then(function() {
+                    // console.log('then1')
+                // })
+                console.log('promise done');
+                resolve('done');
+                // promise.then(function() {
+                    // console.log('then2')
+                // })
+            }, 2000)
+        });
+        
+        promise.then(function() {
+            console.log('then')
+        })
+        promise
+        .then(function() {
+            console.log('then2');
+        })
+        .then(new MyPromise(function(resolve) {
+            setTimeout(function() {
+                console.log('promise2 done');
+                resolve('done');
+            }, 3000)
+        }).then(function() {
+            console.log('promise2', 'then');
+        }))
+        .then(function() {
+            console.log('then3');
+        });
+    
+    </script>
+</body>
+</html>

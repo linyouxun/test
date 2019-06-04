@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>promise test</title>
+</head>
+<body>
+    <script>
+        var MyPromise = (function() {
+            var stateAll = {
+                pending: 'pending',
+                fulfilled: 'fulfilled'
+            }
+            var Promise = function (fn) {
+                var value,callbacks = [], state = stateAll.pending;
+                this.then = function(cb) {
+                    switch(state) {
+                        case stateAll.pending: {
+                            // 添加
+                            console.log('添加')
+                            callbacks.push(cb)
+                            break;
+                        }
+                        case stateAll.fulfilled: {
+                            // 立即执行
+                            console.log('立即执行')
+                            setTimeout(function() {
+                                cb()
+                            }, 0)
+                            break;
+                        }
+                    }
+                    return this
+                };
+                function resolve(value) {
+                    state = stateAll.fulfilled;
+                    setTimeout(function() {
+                        callbacks.forEach(function(cb) {
+                            // 执行
+                            console.log('执行')
+                            cb(value);
+                            console.log('执行结束')
+                        });
+                    }, 0);
+                }
+                fn(resolve);
+                return this;
+            }
+            Promise.prototype.catch = function() {};
+            return Promise;
+        })()
+
+        var promise = new MyPromise(function(resolve) {
+            console.log('do')
+            setTimeout(function() {
+                resolve('resolve')
+                promise.then(function(value) {
+                    console.log('then4', value)
+                })
+                console.log('done')
+            }, 1000);
+        })
+        promise.then(function(value) {
+            console.log('then1', value);
+        })
+        promise.then(function(value) {
+           console.log('then2', value);
+        }).then(function(value) {
+           console.log('then3', value);
+        })
+
+    </script>
+</body>
+</html>

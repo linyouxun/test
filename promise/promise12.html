@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>promise12</title>
+</head>
+<body>
+    <script>
+        var Promise = (function() {
+            var PENDING = 'PENDING';
+            var RESOLVE = 'RESOLVE';
+            var REJECT = 'REJECT';
+            function Promise(fn) {
+                var _self = this;
+                _self.data = '';
+                _self.state = PENDING;
+                _self.onResolvedCallback = [];
+                _self.onRejectedCallback = [];
+                function resolve(value) {
+                    setTimeout(function() {
+                        if (value instanceof Promise) {
+                            return value.then(resolve, reject);
+                        }
+                        if(_self.state === PENDING) {
+                            _self.state = RESOLVE;
+                            _self.data = value;
+                            for(var i = 0; i < _self.onResolvedCallback.length; i++) {
+                                _self.onResolvedCallback[i](_self.data);
+                            }
+                        }
+                    }, 0)
+                }
+                function reject(value) {
+                    setTimeout(function() {
+                        if(_self.state === PENDING) {
+                            _self.state = REJECT;
+                            _self.data = value;
+                            for(var i = 0; i < _self.onRejectedCallback.length; i++) {
+                                _self.onRejectedCallback[i](_self.data);
+                            }
+                        }
+                    }, 0)
+                }
+                try {
+                    fn(resolve, reject);
+                } catch (error) {
+                    reject(error);
+                }
+            }
+            Promise.prototype.then = function(onResolved, onRejected) {
+                _self = this;
+                var promise2;
+                onResolved = typeof onResolved === 'function' ? onResolved : function(r) {return r};
+                onRejected = typeof onRejected === 'function' ? onRejected : function(r) {return r};
+                if (_self.state === PENDING) {
+                    return promise2 = new Promise(function(resolve, rejetc) {
+                        _self.onResolvedCallback.push(function() {
+                            var x = onResolved(_self.data);
+                            if (x instanceof Promise) {
+                                x.then(resolve, rejetc);
+                            }
+                            resolve(x);
+                        })
+                        _self.onRejectedCallback.push(function() {
+                            var x = onRejetced(_self.data);
+                            if (x instanceof Promise) {
+                                x.then(resolve, rejetc);
+                            }
+                            rejetc(x);
+                        })
+                    })
+                }
+                if (_self.state === RESOLVE) {
+                    return promise2 = new Promise(function(resolve, rejetc) {
+                        var x = resolve(_self.data);
+                        if (x instanceof Promise) {
+                            x.then(resolve, rejetc);
+                        }
+                        resolve(x);
+                    })
+                }
+                if (_self.state === REJECT) {
+                    return promise2 = new Promise(function(resolve, rejetc) {
+                        var x = rejetc(_self.data);
+                        if (x instanceof Promise) {
+                            x.then(resolve, rejetc);
+                        }
+                        rejetc(x);
+                    })
+                }
+            }
+            return Promise;
+        })()
+        var p = new Promise(function(resolve, reject) {
+            setTimeout(function() {
+                resolve('done')
+            }, 1000);
+        }).then(function(res) {
+            console.log('then1', res);
+            return '1';
+        }).then(function(res) {
+            console.log('then2', res);
+            return '2';
+        })
+        p.then(function(res) {
+            console.log('then3', res);
+            return '3';
+        }).then(function(res) {
+            console.log('then4', res);
+            return '4';
+        })
+    </script>
+</body>
+</html>

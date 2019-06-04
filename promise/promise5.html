@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>promise</title>
+</head>
+<body>
+    <script>
+        var MyPromise = (function() {
+            var STATES = {
+                pendding: 'pendding',
+                fulfilled: 'fulfilled',
+            } 
+            var Promise = function(fn) {
+                var values, callbacks = [], state = STATES.pendding;
+                this.then = function(cb) {
+                    switch(state) {
+                        case STATES.pendding: {
+                            callbacks.push(cb);
+                            break;
+                        }
+                        case STATES.fulfilled: {
+                            cb();
+                            break;
+                        }
+                    }
+                    return this;
+                }
+                function resolve() {
+                    state = STATES.fulfilled;
+                    setTimeout(function() {
+                        callbacks.forEach(function(cb) {
+                            cb();
+                        });      
+                    }, 0)
+                }
+                fn(resolve);
+            }
+            return Promise;
+        })();
+        var promise = new MyPromise(function(resolve) {
+            setTimeout(function() {
+                promise.then(function() {
+                    console.log('done');
+                })
+                resolve('done');
+                promise.then(function() {
+                    console.log('done2');
+                })
+            }, 2000);
+        });
+        promise.then(function() {
+            console.log('then');
+        }).then(function() {
+            console.log('then2')
+        })
+        promise.then(function() {
+            console.log('then3');
+        })
+        
+    </script>
+</body>
+</html>

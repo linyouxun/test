@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>fibonacci 斐波那契数列</title>
+</head>
+<body>
+    <script>
+        console.time('1')
+        // 递归版 消耗空间
+        var fibonacci = function(n) {
+            if (n == 0 || n == 1) return 1;
+            return fibonacci(n - 1) + fibonacci(n - 2); 
+        }
+        var s = fibonacci(50)
+        console.log(s);
+        console.timeEnd('1')
+        console.time('2')
+        var fibonacci2 = function(n) {
+            var arr = new Array(n + 1);
+            if (n == 0 || n == 1) return 1;
+            arr[0] = 1;
+            arr[1] = 1;
+            for(var i = 2; i < arr.length; i++) {
+                arr[i] = arr[i - 1] + arr[i - 2];
+            }
+            return arr[n];
+        }
+        s = fibonacci2(50)
+        console.log(s);
+        console.timeEnd('2')
+    </script>
+</body>
+</html>

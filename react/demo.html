@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="app">
+
+    </div>
+    <script>
+        function ReactDOMTextComponent(container) {
+            this.container = container;
+            this.rootId = 0
+        }
+        ReactDOMTextComponent.prototype.mountCompoment = function(id) {
+            this.rootId = id;
+            return `<div react-id="${this.rootId}" >${this.container}</div>`
+        }
+
+        function renderHtml(container) {
+            if (typeof container === 'string' || typeof container === 'number') {
+                return new ReactDOMTextComponent(container)
+            }
+            //浏览器默认节点的情况
+            if(typeof node === 'object' && typeof node.type === 'string'){
+                //注意这里，使用了一种新的component
+                return new ReactDOMComponent(node);
+            }
+        }
+
+        function ReactElement(type, key, props) {
+            this.type = type;
+            this.key = key;
+            this.props = props;
+        }
+
+        var React = {
+            nextReactRootIndex: 0,
+            createElement: function(type, config, children) {
+                var props = {}, prototype;
+                config = config || {};
+                var key = config.key || null;
+                for(var name in config) {
+                    if(name !== 'key') {
+                        props[name] = config[name];
+                    }
+                }
+                //处理children,全部挂载到props的children属性上
+                //支持两种写法，如果只有一个参数，直接赋值给children，否则做合并处理
+                var childrenLength = arguments.length - 2;
+                if (childrenLength === 1) {
+                    props.children = $.isArray(children) ? children : [children] ;
+                } else if (childrenLength > 1) {
+                    var childArray = Array(childrenLength);
+                    for (var i = 0; i < childrenLength; i++) {
+                        childArray[i] = arguments[i + 2];
+                    }
+                    props.children = childArray;
+                }
+                return new ReactElement(type, key,props);
+            },
+            render: function(element, container) {
+                var child = renderHtml(container);
+                var childStr = child.mountCompoment(this.nextReactRootIndex++);
+                $(element).html(childStr);
+                $(document).trigger('mountReady');
+            }
+        }
+        React.render('#app', 'nihao');
+        
+    </script>
+</body>
+</html>

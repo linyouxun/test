@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>extend5</title>
+</head>
+<body>
+    <script>
+    var _extend = function(c, p) {
+        Object.setPrototypeOf(c, p);
+        function __() {
+            this.constructor = c
+        };
+        __.prototype = p.prototype;
+        c.prototype = new __();
+        c.prototype.constructor = c; 
+    }
+    var _extend2 = function(c, p) {
+        // Object.setPrototypeOf(c, p);
+        function __() {
+            this.constructor = c
+        };
+        __.prototype = p.prototype;
+        c.prototype = new __();
+        c.prototype.constructor = c; 
+    }
+
+    var A = (function() {
+        function A(name) {
+            console.log('init A');
+            this.name = name;
+            this.getName2 = function() {
+                return this.name;
+            }
+        }
+        A.prototype.getName = function() {
+            console.log('A')
+            return this.name;
+        }
+        A.prototype.setName = function(name) {
+            this.name = name;
+        }
+        return A;
+    })()
+    var B = (function(_super) {
+        _extend(B, _super);
+        function B(name, age) {
+            _super.call(this, name);
+            this.age = age;
+        }
+        B.prototype.getName = function() {
+            console.log('B');
+            return this.name;
+        }
+        B.prototype.getAge = function() {
+            return this.age;
+        }
+        return B;
+    })(A)
+    var B2 = (function(_super) {
+        _extend2(B, _super);
+        function B(name, age) {
+            _super.call(this, name);
+            this.age = age;
+        }
+        B.prototype.getName = function() {
+            console.log('B');
+            return this.name;
+        }
+        B.prototype.getAge = function() {
+            return this.age;
+        }
+        return B;
+    })(A)
+    var C = (function(_super) {
+        function C(name , age) {
+            _super.call(this, name)
+            this.name = name;
+            this.age = age;
+        }
+        C.prototype = new _super();
+        C.prototype.constructor = C;
+        return C;
+    })(A)
+    // var a = new A('lyx a');
+    // var b = new B('lyx b', 18);
+    // var b2 = new B2('lyx b2', 18);
+    // var c = new C('lyx c', 18);
+    // console.log(a, b, b2);
+    // console.log(b2);
+    // console.log(c);
+    </script>
+</body>
+</html>

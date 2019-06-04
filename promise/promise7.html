@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>promise</title>
+</head>
+<body>
+    <script>
+        
+        var Promise = (function() {
+            var PENDDING = 'PENDDING';
+            var RESOLVE = 'RESOLVE';
+            var REJECT = 'REJECT';
+            var Promise = function(fn) {
+                var that = this;
+                this.state = PENDDING;
+                this.value = '';
+                this.callback = [];
+                function resolve() {
+                    console.log('resolve')
+                    if (that.state === PENDDING) {
+                        for(var i = 0; i < that.callback.length; i++) {
+                            that.callback[i] && that.callback[i]();
+                        }
+                        that.state = RESOLVE;
+                    }
+                    return that;
+                }
+                function reject() {
+                    console.log('reject')
+                    if (that.state === PENDDING) {
+                        for(var i = 0; i < that.callback.length; i++) {
+                            that.callback[i] && that.callback[i]();
+                        }
+                        that.state = REJECT;
+                    }
+                    return that;
+                }
+                try {
+                    fn(resolve, reject);
+                } catch (error) {
+                    reject();
+                }
+            }
+            Promise.prototype.then = function(cb) {
+                if (this.state === PENDDING) {
+                    this.callback.push(cb);
+                } else {
+                    cb();
+                }
+                return this;
+            }
+            return Promise
+        })()
+
+        var p = new Promise(function(resolve, reject) {
+            setTimeout(function() {
+                resolve('resolve done');
+            }, 1000);
+        }).then(function(res) {
+            console.log('then 1', res)
+        }).then(function(res) {
+            console.log('then 2', res)
+        })
+        p.then(function(res) {
+            console.log('then 3', res)
+        }).then(function(res) {
+            console.log('then 4', res)
+        })
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>promise 实现</title>
+</head>
+<body>
+    <script>
+
+        const STATE = {
+            pending: 0,
+            fullfilled: 1,
+            rejected: 2
+        }
+
+        function MyPromise(callback) {
+            this.status = STATE.pending;
+            this.value = null;
+            this.defferd = [];
+            setTimeout(callback.bind(this, this.resolve.bind(this), this.reject.bind(this)), 0);
+        }
+
+        MyPromise.prototype = {
+            constructor: MyPromise,
+            resolve: function(result) {
+                this.status = STATE.fullfilled;
+                this.value = result;
+                this.done();
+            },
+            reject: function(error) {
+                this.status = STATE.rejected;
+                this.value = error;
+            },
+            handle: function(fn) {
+                if(!fn) {
+                    return;
+                }
+                var value = this.value;
+                var t = this.status;
+                var p;
+                if(t === STATE.pending) {
+                    // 不懂
+                    this.defferd.push(fn);
+                } else {
+                    if (t === STATE.fullfilled && typeof fn.onfulfiled === 'function') {
+                        p = fn.onfulfiled(value);
+                    }
+                    if (t === STATE.rejected && typeof fn.onrejected === 'function') {
+                        p = fn.onrejected(value);
+                    }
+                    var promise = fn.promise;
+                    if(promise) {
+                        if(p && p.constructor === MyPromise) {
+                            p.defferd = promise.defferd;
+                        } else {
+                            p = this;
+                            p.defferd = promise.defferd;
+                            this.done();
+                        }
+                    }
+                }
+            },
+            done: function() {
+                var status = this.status;
+                if(status === STATE.pending) {
+                    return;
+                }
+                var defferd = this.defferd;
+                for(var i = 0; i < defferd.length; i++) {
+                    this.handle(defferd[i]);
+                }
+            },
+            then: function(success, fail) {
+                var o = {
+                    onfulfiled: success,
+                    onrejected: fail
+                };
+                var status = this.status;
+                o.promise = new this.constructor(function() {
+
+                });
+                if(status == STATE.pending) {
+                    this.defferd.push(o);
+                } else if(status === STATE.fullfilled || status === STATE.rejected) {
+                    this.handle(o);
+                }
+                return o.promise;
+            },
+        }
+
+        function f() {
+            return new MyPromise(function(resolve, reject) {
+                setTimeout(() => {
+                    console.log('set time out ');
+                    resolve('nihao');
+                }, 2000);
+            })
+        }
+        var a = f();
+        console.log(a);
+        a.then(name => {
+            console.log('then trigger');
+            console.log(name);
+        });
+
+        // 1
+        // function MyPromise(fn) {
+        //     var state = 'pending';
+        //     var value = null;
+        //     var callback = [];
+        //     this.then = function (onFulfilled) {
+        //         if(state = 'pending') {
+        //             callback.push(onFulfilled);
+        //             return this;
+        //         }
+        //         onFulfilled(value);
+        //         return this;
+        //     }
+        //     function resolve(newValue) {
+        //         value = newValue;
+        //         state = 'fulfilled';
+        //         console.log('state change');
+        //         setTimeout(() => {
+        //             callback.forEach(function(callback) {
+        //                 value = callback(value);
+        //             })
+        //         }, 0);
+        //     }
+        //     fn(resolve);
+        // }
+        
+
+        // var a = new MyPromise(function(resolve) {
+        //     setTimeout(()=> {
+        //         resolve('my promise done')
+        //     }, 2000)
+        // }).then(function(id) {
+        //     console.log('log ' + id);
+        //     return '2222';
+        // }).then(function(id) {
+        //     console.log('log2 ' + id);
+        // }).then(function(id) {
+        //     console.log('log3 ' + id);
+        // });
+
+        // setTimeout(() => {
+        //     a.then(function(id) {
+        //         console.log(id);
+        //         console.log('i am delay trigger');
+        //     })
+        // }, 1000);
+
+    </script>
+</body>
+</html>

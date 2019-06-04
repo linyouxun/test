@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>练习</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .more {
+            width: 200px;
+            height: 20px;
+            line-height: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .context {
+            text-align: center;
+            width: 200px;
+            background-color: lightgray;
+        }
+        .inner {
+            text-align: left;
+            display: inline-block;
+        }
+        .triangle {
+            width: 0;
+            height: 0;
+            border-top: 40px solid transparent;
+            border-left: 40px solid transparent;
+            border-right: 40px solid transparent;
+            border-bottom: 40px solid #ff0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="more">[Thu May 23 2019 15:22:46 GMT+0800 (中国标准时间)] "GET /" "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36"</div>
+
+    <div class="context">
+        <div class="inner">[Thu May 23 2019 15:22:46 GMT+0800 (中国标准时间)] "GET /</div>
+    </div>
+
+    <div class="triangle">
+
+    </div>
+
+</body>
+</html>

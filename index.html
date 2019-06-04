@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div>8</div>
+    <button onclick="buttonClick()">buttonClick</button>
+    <script type='text/javascript'>
+        function buttonClick() {
+            const textarea = document.createElement("textarea")
+            textarea.style.position = 'fixed'
+            textarea.style.top = 0
+            textarea.style.left = 0
+            textarea.style.border = 'none'
+            textarea.style.outline = 'none'
+            textarea.style.resize = 'none'
+            textarea.style.background = 'transparent'
+            textarea.style.color = 'transparent'
+
+            textarea.value = window.location.href
+
+            document.body.appendChild(textarea)
+            textarea.select()
+            try {
+                const msg = document.execCommand('selectAll') ? 'successful' : 'unsuccessful'
+                // alert(msg)
+            } catch (err) {
+                // alert('unable to copy', err)
+            }
+            // document.body.removeChild(textarea)
+        }
+    </script>
+</body>
+</html>

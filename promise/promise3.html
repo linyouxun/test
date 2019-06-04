@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>promise3</title>
+</head>
+<body>
+    <script>
+        (function() {
+            var MyPromise = function(fn) {
+                var value = null;
+                callbacks = [];
+                this.then = function(cb) {
+                    console.log('then');
+                    callbacks.push(cb);
+                    return this;
+                }
+                function resolve(value) {
+                    setTimeout(() => {
+                        for (const cb of callbacks) {
+                            cb(value);
+                        }
+                    }, 0);
+                }
+                fn(resolve);
+            }
+            window.MyPromise = MyPromise;
+        })()
+        
+        var myPromise = new MyPromise(function(resolve) {
+            console.log('resolve');
+            resolve('111');
+            console.log('resolve2');
+        });
+        myPromise.then(function() {
+            console.log('then2');
+        })
+    
+    </script>
+</body>
+</html>

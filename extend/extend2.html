@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>extend</title>
+</head>
+<body>
+    <script>
+        
+        (function() {
+            var initializing = false;
+            var fnTest = /xyz/.test(function () { xyz; }) ? /\b_super\b/ : /.*/;
+            // 超级父类
+            this.Class = function() {}
+            Class.extend = function(prop) {
+                // 保留当前类，一般是父类
+                var _super = this.prototype;
+
+                initializing = true;
+                var prototype = new this();
+                initializing = false;
+
+                for (var name in prop) {
+                    // 将prop的属性混入子类
+                    prototype[name] = typeof prop[name] == 'function' && 
+                        typeof _super[name] == 'function' && fnTest.test(prop[name]) ?
+                        (function(name, fn) {
+                            return function () {
+                                var tmp = this._super;
+                                this._super = _super[name];
+                                var ret = fn.apply(this, arguments);
+                                this._super = tmp;
+                                return ret;
+                            }
+                        })(name, prop[name]) : prop[name]
+                }
+
+                function Class() {
+                    if(!initializing && this.init) {
+                        this.init.apply(this, arguments);
+                    }
+                }
+
+                Class.prototype = prototype;
+                Class.prototype.constructor = Class;
+                Class.extend = arguments.callee;
+                return Class;
+
+            }
+        })()
+    
+    </script>
+</body>
+</html>

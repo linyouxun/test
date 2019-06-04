@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>promise 10</title>
+</head>
+<body>
+    <script>
+        var Promise = (function() {
+            var PENDING = 'PENDING';
+            var FULFILLED = 'FULFILLED';
+            var REJECT = 'REJECT';
+            function Promise(fn) {
+                var _self = this;
+                _self.state = PENDING;
+                _self.data = '';
+                _self.onResolvedCallback = [];
+                _self.onRejectedCallback = [];
+                function resolve(value) {
+                    if (value instanceof Promise) {
+                        return value.then(resolve, reject);
+                    }
+                    setTimeout(function() {
+                        if (_self.state === PENDING) {
+                            _self.state = FULFILLED;
+                            _self.data = value;
+                            for(var i = 0; i < _self.onResolvedCallback.length; i++) {
+                                _self.onResolvedCallback[i](value)
+                            }
+                        }
+                    })
+                }
+                function reject() {
+                    setTimeout(() => {
+                        if (_self.state === PENDING) {
+                            _self.state = REJECT;
+                            _self.data = value;
+                            for(var i = 0; i < _self.onRejectedCallback.length; i++) {
+                                _self.onRejectedCallback[i](value)
+                            }
+                        }
+                    })
+                }
+                try {
+                    fn(resolve, reject);
+                } catch (error) {
+                    reject(error);
+                }
+            }
+            Promise.prototype.then = function(onResolved, onRejected) {
+                var promise2;
+                var _self = this;
+                onResolved = typeof onResolved === 'function' ? onResolved : function(r) {return r};
+                onRejected = typeof onRejected === 'function' ? onRejected : function(r) {return r};
+                if (_self.state === PENDING) {
+                    return promise2 = new Promise(function(resolve, reject) {
+                        _self.onResolvedCallback.push(function(value) {
+                            try {
+                               var x = onResolved(_self.data)
+                                if (x instanceof Promise) {
+                                    x.then(resolve, reject)
+                                }
+                                resolve(x);
+                            } catch (e) {
+                                reject(e)
+                            }
+                        })
+                        _self.onRejectedCallback.push(function(value) {
+                            try {
+                               var x = onRejected(_self.data)
+                                if (x instanceof Promise) {
+                                    x.then(resolve, reject)
+                                }
+                            } catch (e) {
+                                reject(e)
+                            }
+                        })
+                    })
+                }
+                if (_self.state === FULFILLED) {
+                    return promise2 = new Promise(function(resolve, reject) {
+                        try {
+                            var x = resolve(_self.data);
+                            if (x instanceof Promise) {
+                                x.then(resolve, reject);
+                            }
+                            resolve(x);
+                        } catch (error) {
+                            reject(error);
+                        }
+                    })
+                }
+                if (_self.state === REJECT) {
+                    return promise2 = new Promise(function(resolve, reject) {
+                        try {
+                            var x = reject(_self.data);
+                            if (x instanceof Promise) {
+                                x.then(resolve, reject);
+                            }
+                        } catch (error) {
+                            reject(error);
+                        }
+                    })
+                }
+            }
+            // 为了下文方便，我们顺便实现一个catch方法
+            Promise.prototype.catch = function(onRejected) {
+            return this.then(null, onRejected)
+            }
+            return Promise;
+        })()
+        var p = new Promise(function(resolve, reject) {
+            setTimeout(function() {
+                resolve('done')
+            }, 1000);
+        }).then(function(res) {
+            console.log('then1', res);
+            // return '1';
+        }).then(function(res) {
+            console.log('then2', res);
+            return '2';
+        })
+        p.then(function(res) {
+            console.log('then3', res);
+            return '3';
+        }).then(function(res) {
+            console.log('then4', res);
+            return '4';
+        })
+    </script>
+</body>
+</html>
