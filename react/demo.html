@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 </head>
 <body>
     <div id="app">
@@ -21,14 +21,79 @@
             return `<div react-id="${this.rootId}" >${this.container}</div>`
         }
 
+        function ReactDOMComponent(container) {
+            this.rootId = 0;
+            this.container = container;
+        }
+
+        ReactDOMComponent.prototype.mountCompoment = function(id) {
+            this.rootId = id;
+            var configStr = '';
+            for (const key in this.container.props) {
+                if (this.container.props.hasOwnProperty(key) && key != 'children') {
+                    if (/^on/.test(key)) {
+                        // 事件处理
+
+                    } else {
+                        configStr += `${key}='${this.container.props[key]}'`
+                    }
+                }
+            }
+            return `<div react-id="${this.rootId}"${this.container.key ? " key='" + this.rootId + '__' + this.container.key + "'" : ''} ${configStr} >${
+                this.container.props.children.map((item, index) => {
+                    var child = renderHtml(item)
+                    var childStr = child.mountCompoment(this.rootId + '_' + index);
+                    return childStr;
+                }).join('')
+            }</div>`
+        }
+
+        function ReactCompositeComponent(container) {
+            this.rootId = 0;
+            this.container = container;
+            // 存放对应的ReactClass的实例
+            this._instance = null;
+        }
+
+        ReactDOMComponent.prototype.mountCompoment = function(id) {
+            this.rootId = id;
+            var ReactClass = this.container.type;
+            var props = this.container.props;
+            var instance = new ReactClass(props);
+            this._instance = instance;
+            // 保留对当前comonent的引用，下面更新会用到
+            inst._reactInternalInstance = this;
+            // componentDidMount
+            if(instance.componentWillMount) {
+                instance.componentWillMount();
+            }
+            var renderedElement = instance.render();
+            this._component = renderHtml(renderedElement);
+            var markup = this._component.mountCompoment(this.rootId);
+
+            //之前我们在React.render方法最后触发了mountReady事件，所以这里可以监听，在渲染完成后会触发。
+            $(document).on('mountReady', function() {
+                //调用inst.componentDidMount
+                inst.componentDidMount && inst.componentDidMount();
+            });
+            return markup;
+        }
+
+        function ReactClass() {}
+        ReactClass.prototype.render = function() {}
+
         function renderHtml(container) {
             if (typeof container === 'string' || typeof container === 'number') {
                 return new ReactDOMTextComponent(container)
             }
             //浏览器默认节点的情况
-            if(typeof node === 'object' && typeof node.type === 'string'){
+            if(typeof container === 'object' && typeof container.type === 'string'){
                 //注意这里，使用了一种新的component
-                return new ReactDOMComponent(node);
+                return new ReactDOMComponent(container);
+            }
+            // 自定义节点
+            if (typeof container === 'object' && typeof container.type === 'function') {
+                return new ReactCompositeComponent(container);
             }
         }
 
@@ -40,6 +105,16 @@
 
         var React = {
             nextReactRootIndex: 0,
+            createClass: function(spec) {
+                var Constructor = function(props) {
+                    this.props = props;
+                    this.state = this.getInitState ? this.getInitState : null;
+                }
+                Constructor.prototype = new ReactClass();
+                Constructor.prototype.constructor = Constructor;
+                $.extend(Constructor.prototype, spec);
+                return Constructor;
+            },
             createElement: function(type, config, children) {
                 var props = {}, prototype;
                 config = config || {};
@@ -49,8 +124,8 @@
                         props[name] = config[name];
                     }
                 }
-                //处理children,全部挂载到props的children属性上
-                //支持两种写法，如果只有一个参数，直接赋值给children，否则做合并处理
+                // 处理children，全部挂载到props的children属性上
+                // 支持两种写法，如果只有一个参数，直接赋值给children，否则做合并处理
                 var childrenLength = arguments.length - 2;
                 if (childrenLength === 1) {
                     props.children = $.isArray(children) ? children : [children] ;
@@ -61,16 +136,34 @@
                     }
                     props.children = childArray;
                 }
-                return new ReactElement(type, key,props);
+                return new ReactElement(type, key, props);
             },
-            render: function(element, container) {
+            render: function(container, element) {
                 var child = renderHtml(container);
                 var childStr = child.mountCompoment(this.nextReactRootIndex++);
                 $(element).html(childStr);
                 $(document).trigger('mountReady');
             }
         }
-        React.render('#app', 'nihao');
+        var Hello = React.createClass({
+            getInitState: function() {
+                return {
+                    type: 'test'
+                }
+            },
+            componentWillMount() {
+                console.log('componentWillMount')
+            },
+            componentDidMount() {
+                console.log('componentDidMount')
+            },
+            render: function() {
+                console.log('render')
+                return React.createElement("div", null,this.state.type, "Hello ", this.props.name);
+            }
+        })
+        var clickFun = function() {console.log('log2')};
+        React.render(React.createElement(Hello, {}, 'test'), '#app');
         
     </script>
 </body>

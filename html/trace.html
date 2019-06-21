@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>页面追踪</title>
+</head>
+<body>
+    <a href="/">link</a>
+    参考链接：http://www.ruanyifeng.com/blog/2019/04/user-tracking.html
+    <script>
+        window.addEventListener('unload', function() {
+            navigator.sendBeacon('http://localhost:8787/?s=s')
+        });
+    </script>
+</body>
+</html>

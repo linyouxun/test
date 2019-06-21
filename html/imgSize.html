@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>图片获取宽高，大小</title>
+</head>
+<body>
+    <input type="file" name="" id="file">
+    <button onclick="getSize()">click</button>
+    <script>
+        // 现代浏览器基本兼容
+        var getSize = function() {
+            var input = document.getElementById('file').files[0];
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var data = e.target.result;
+                var image = new Image();
+                image.onload = function() {
+                    var width = image.width;
+                    var height = image.height;
+                    console.log(width, height)
+                }
+                image.src = data;
+            }
+            reader.onprogress = function(e) {
+                console.log(e);
+            }
+           reader.readAsDataURL(input);
+        }
+
+    </script>
+</body>
+</html>

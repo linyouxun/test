@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var a = [1, 2, [2, [2, [, 2, 4, 34],5, 7, [2, [, 2, 4, 34],5, 7]], 3, 4, [2, 67, 8]], 5, 7, 8, 9, , 5, 7, , , 456,67, 34, 67];
+        // flat实现 扁平化
+        Array.prototype.myFlat = function(depth) {
+            depth = depth === undefined ? 1 : depth;
+            var _data = this;
+            var len = _data.length;
+            var ret = [];
+            for(var i = 0; i < len; i++) {
+                if (!_data.hasOwnProperty(i)) continue;
+                if (Object.prototype.toString.call(_data[i]) == '[object Array]' && depth > 0) {
+                    ret = ret.concat(arguments.callee.call(_data[i], depth - 1));
+                } else {
+                    ret.push(_data[i]);
+                }
+            }
+            return ret;
+        }
+        console.log(a.myFlat());
+    </script>
+</body>
+</html>

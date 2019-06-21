@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        .border {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            background: lightgray;
+            -webkit-box-reflect: below;
+        }
+
+        .border2 {
+            margin: 50px auto;
+            width: 200px;
+            height: 200px;
+            background-image: url('http://www.qq1234.org/uploads/allimg/150602/8_150602171754_2.jpg');
+            position: relative;
+        }
+        /* .border2::after {
+            content: "";
+            background-image: inherit;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            bottom: -100%;
+            transform: rotateX(180deg);
+        } */
+        .border2:before {
+            content: "";
+            background-image: inherit;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            bottom: -100%;
+            transform: rotateX(180deg);
+        }
+
+        .border2:after {
+            content: "";
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            bottom: -200px;
+            background: linear-gradient(0deg, rgba(255, 255, 255, 1)0%, rgba(255, 255, 255, 0)100%);
+            z-index: 2;
+        }
+        .flex {
+            display: flex;
+        }
+        .flex-1 {
+            flex: 1;
+        }
+    </style>
+    <div class="flex">
+        <div class="flex-1">
+                <img src='https://camo.githubusercontent.com/d5bc51bc541a6a2376ee4ff61dd2f3be2c1f7b4d/687474703a2f2f696d616765732e636e626c6f67732e636f6d2f636e626c6f67735f636f6d2f636f636f31732f3838313631342f6f5f746573742e6a7067' class="border"/>
+        </div>
+        <div class="flex-1">
+            <div class="border2">
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

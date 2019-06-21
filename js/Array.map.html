@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var a = [1, 2, [2, [2, [, 2, 4, 34],5, 7, [2, [, 2, 4, 34],5, 7]], 3, 4, [2, 67, 8]], 5, 7, 8, 9, , 5, 7, , , 456,67, 34, 67];
+        // map实现
+        Array.prototype.myMap = function(fn) {
+            var _data = this;
+            var len = _data.length;
+            var ret = [];
+            for(var i = 0; i < len; i++) {
+                // 处理稀疏数组
+                if (!_data.hasOwnProperty(i)) {
+                    ret.push(1);
+                    delete ret[i];
+                    continue
+                };
+                ret.push(fn.call(this, _data[i], i, _data));
+            }
+            return ret
+        }
+        Array.prototype.myMap2 = function(fn) {
+            var _data = this; 
+            var ret = [];
+            var a = [1].concat(_data)
+            a.reduce(function(i, i2, index) {
+                ret.push(fn.call(this, i2, index, _data))
+                return i2;
+            })
+            return ret;
+        }
+        var b = a.map((item, i2, i3, i4) => {
+            console.log(item, i2, i3, i4);
+            return item
+        })
+        var b2 = a.myMap((item, i2, i3, i4) => {
+            console.log(item, i2, i3, i4);
+            return item
+        })
+        var b3 = a.myMap2((item, i2, i3, i4) => {
+            console.log(item, i2, i3, i4);
+            return item
+        })
+    </script>
+</body>
+</html>

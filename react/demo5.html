@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>react实现5</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+    <script>
+        function ReactTextComponent(node) {
+            this.node = node;
+            this.rootIndex = 0;
+        }
+        ReactTextComponent.prototype.componentRender = function(index) {
+            this.rootIndex = index;
+            return `<div react-id='${index}'>${this.node}</div>`
+        }
+
+        function ReactElement(type, key, props) {
+            this.type = type;
+            this.key = key;
+            this.props = props;
+        }
+
+        function ReactDomCompoment(node) {
+            this.node = node;
+            this.rootIndex = 0;
+        }
+        ReactDomCompoment.prototype.componentRender = function(index) {
+            this.rootIndex = index;
+            var props = this.node.props || {};
+            var key = this.node.key || '';
+            var propStr = ''
+            for(var name in props) {
+                if (/^on/.test(name)) {
+                    name.replace(/^on(.*)/, '$1')
+                    $(document).delegate(`[react-id="${index}"]`, name.replace(/^on(.*)/, '$1') + '.' + index, props[name])
+                } else if(name !== 'children') {
+                    propStr += ` ${name}="${props[name]}"`;
+                }
+            }
+            var childrenStr = '';
+            props.children = props.children || [];
+            props.children.forEach((element, index) => {
+                var childDom = ReactDom(element);
+                var childMarkup = childDom.componentRender(this.rootIndex + '.' + index);
+                childrenStr += childMarkup;
+            });
+            return `<${this.node.type} react-id='${index}' ${!!key ? 'key="' + key + '"' : ''} ${propStr}>
+                ${childrenStr}
+            </${this.node.type}>`
+        }
+
+        function ReactCustomCompoment(node) {
+            this.node = node;
+            this.rootIndex = 0;
+            this.instance = null;
+        }
+
+        ReactCustomCompoment.prototype.componentRender = function(index) {
+            this.rootIndex = index;
+            var props = this.node.props;
+            var ReactClass = this.node.type;
+            
+            var inst = new ReactClass(props);
+
+            // 要更新组件
+            if (inst.componentWillMount) {
+                inst.componentWillMount();
+            }
+
+            var reactInstance = inst.render();
+            var reactInstanceDom = new ReactDom(reactInstance);
+            var markup = reactInstanceDom.componentRender();
+            return markup;
+        }
+
+
+        function ReactDom(node) {
+            if (typeof node === 'string' || typeof node === 'number') {
+                return new ReactTextComponent(node);
+            }
+            if (typeof node === 'object' && typeof node.type === 'string') {
+                return new ReactDomCompoment(node);
+            }
+            if (typeof node === 'object' && typeof node.type === 'function') {
+                return new ReactCustomCompoment(node);
+            }
+        }
+        var React = {
+            nextIndex: 0,
+            createClass: function (spec){
+                function Constructor(props) {
+                    this.props = props;
+                    this.state = this.getInitialState ? this.getInitialState() : null;   
+                }
+                Constructor.prototype.render = function() {}
+                $.extend(Constructor.prototype, spec);
+                return Constructor;
+            },
+            createElement: function(type, config, children) {
+                var props = {},propName;
+                config = config || {}
+                var key = config.key || null;
+                for (propName in config) {
+                    if (config.hasOwnProperty(propName) && propName !== 'key') {
+                        props[propName] = config[propName];
+                    }
+                }
+                var childrenLength = arguments.length - 2;
+                if (childrenLength === 1) {
+                    props.children = $.isArray(children) ? children : [children] ;
+                } else if (childrenLength > 1) {
+                    var childArray = Array(childrenLength);
+                    for (var i = 0; i < childrenLength; i++) {
+                        childArray[i] = arguments[i + 2];
+                    }
+                    props.children = childArray;
+                }
+                return new ReactElement(type, key,props);
+            },
+            render: function(element, container) {
+                var initDom = new ReactDom(element);
+                var markup = initDom.componentRender(this.nextIndex++);
+                $(container).html(markup);
+                $(document).trigger('mountReady');
+            }
+        }
+        function helloFun(data) {
+            console.log('log', data)
+        }
+        var HelloMessage = React.createClass({
+            getInitialState: function() {
+                return {type: 'say:'};
+            },
+            componentWillMount: function() {
+                console.log('我就要开始渲染了。。。')
+            },
+            componentDidMount: function() {
+                console.log('我已经渲染好了。。。')
+            },
+            render: function() {
+                return React.createElement("div", null,this.state.type, "Hello ", this.props.name);
+            }
+        });
+        var click = React.createElement('div', {
+            onclick: helloFun.bind(this, {name: 'test'})
+        }, 'click');
+        var hello = React.createElement('div', {
+            onclick: helloFun
+        }, 'hello');
+        var list = React.createElement('div', {}, [click, click, hello, click]);
+        var Hello = React.createClass({
+            getInitialState: function() {
+                return {name: 'Hello'}
+            },
+            componentWillMount: function() {
+                console.log('componentWillMount')
+            },
+            componentDidMount: function() {
+                console.log('componentDidMount')
+            },
+            render: function() {
+                console.log('render');
+                console.log(this.state, this.props);
+                return list;
+            }
+        })
+        React.render(React.createElement(Hello, {name: 'props'}), '#app');
+    </script>
+</body>
+</html>

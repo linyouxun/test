@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .form {
+            width: 500px;
+            vertical-align: bottom;
+            background-color: #efefef;
+        }  
+        .form-item {
+            width: 500px;
+            height: 32px;
+            line-height: 32px;
+            margin-bottom: 10px;
+            vertical-align: bottom;
+        }
+        .name {
+            display: inline-block;
+            font-size: 16px;
+            width: 68px;
+            height: 32px;
+            line-height: 32px;
+            text-align: justify;
+            vertical-align: bottom;
+        }
+        .name::after {
+            content: '';
+            width: 100%;
+            display: inline-block;
+        }
+        .input {
+            width: 422px;
+            height: 32px;
+            line-height: 32px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="form">
+        <div class="form-item">
+            <label class="name" for="">姓名</label>
+            <input class="input" type="text" placeholder="姓名">
+        </div>
+        <div class="form-item">
+            <label class="name" for="">电话号码</label>
+            <input class="input" type="text" placeholder="电话号码">
+        </div>
+    </div>
+</body>
+</html>

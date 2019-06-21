@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>instanceof</title>
+</head>
+<body>
+    <script>
+        function myInstanceof(left, right) {
+            var prop = left.__proto__;
+            while(true) {
+                if (prop == null) return false;
+                if (prop == right.prototype) return true;
+                prop = prop.__proto__;
+            }
+        } 
+    </script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>authorize</title>
+</head>
+<body>
+    <script>
+        console.log('获取授权');
+        if (getUrlParam('scope') === 'snsapi_userinfo') {
+            window.location.href = './loginjs.html';
+        }
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null)
+            return decodeURIComponent(r[2]);
+            else { // 尝试匹配伪静态的地址参数, 如getinfo-productId-29.html
+            reg = new RegExp(name + "-([^-.]*)");
+            r = window.location.href.match(reg);
+            if (r != null)
+                return decodeURIComponent(r[1])
+            }
+            return null;
+        }
+    </script>
+</body>
+</html>

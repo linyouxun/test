@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>千分位</title>
+</head>
+<body>
+    <script>
+        var toThousand = function(num) {
+            num = (num).toString().split('');
+            var len = num.length;
+            while(len > 3) {
+                len -= 3;
+                num.splice(len, 0, ',');
+            }
+            return num.join('');
+        }
+        var n = 1234567;
+        console.log(toThousand(n));
+        console.log((n).toLocaleString())
+    </script>
+</body>
+</html>

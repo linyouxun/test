@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>extend11</title>
+</head>
+<body>
+    <script>
+        (function() {
+            var initialize = false;
+            var fnTest = /xyz/.test(function(){xyz;}) ? /\b_super\b/ : /.*/;
+            this.Class = function() {}
+            Class.extend = function(prop) {
+                var _super = this.prototype;
+                initialize = true;
+                var prototype = new this();
+                initialize = false;
+                for(var name in prop) {
+                    if (typeof prop[name] == 'function' && typeof _super[name] == 'function' && fnTest.test(prop[name])) {
+                        prototype[name] = (function(name, fn) {
+                            return function() {
+                                var tmp = this._super;
+                                this._super = _super[name];
+                                var ret = fn.apply(this, arguments);
+                                this._super = tmp;
+                                return ret;
+                            }
+                        })(name, prop[name])
+                    } else {
+                        prototype[name] = prop[name]
+                    }
+                }
+
+                function Class() {
+                    if(!initialize && this.init) {
+                        this.init.apply(this, arguments);
+                    }
+                }
+
+                Class.prototype = prototype;
+                Class.prototype.constructor = this;
+                Class.extend = arguments.callee;
+                return Class;
+            }
+        })()
+        var Person = Class.extend({
+            init: function(name) {
+                console.log('person init')
+                this.name = name;
+            },
+            getName: function() {
+                console.log('person getname');
+                return this.name;
+            }
+        })
+
+        // var Man = Person.extend({
+        //     init: function(name, age) {
+        //         this._super(name);
+        //         this.age = age;
+        //         this.sex = '男';
+        //     },
+        //     getSex: function() {
+        //         return this.sex;
+        //     }
+        // })
+        var Man = Person.extend({
+            init: function(name, age) {
+                this._super(name);
+                console.log('man init')
+                this.age = age;
+                this.sex = '男';
+            },
+            getName: function() {
+                var ret = this._super();
+                console.log('man getname')
+                return ret;
+            },
+            getSex: function() {
+                console.log('man getsex')
+                return this.sex;
+            }
+        })
+        var Woman = Person.extend({
+            init: function(name, age) {
+                console.log('woman init')
+                this.name = name;
+                this.age = age;
+                this.sex = '女';
+            },
+            getName: function() {
+                console.log('woman getname')
+                return ret;
+            },
+            getSex: function() {
+                console.log('woman getsex')
+                return this.sex;
+            }
+        })
+        var p = new Person('person')
+        var m = new Man('man')
+        var w = new Woman('woman')
+    </script>
+</body>
+</html>

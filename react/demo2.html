@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>react实现</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+    <script>
+        var React = (function() {
+            function ReactDomText(node) {
+                this.index = 0;
+                this.node = node;
+            }
+            ReactDomText.prototype.render = function(index) {
+                this.index = index;
+                return `<div react-id='${index}'>${this.node}</div>`;
+            }
+            function ReactDom(node) {
+                if (typeof node == 'string' || typeof node == 'number') {
+                    return new ReactDomText(node);
+                }
+                if (typeof node == 'object' && node.type == 'string') {
+
+                }
+            }
+            function ReactElement(type, key, children) {
+                this.type = type;
+                this.key = key;
+                this.children = children;
+            }
+            ReactElement.prototype.render = function(index) {
+                this.index = index;
+                return `${this.type}`
+            }
+            var React = {
+                nextIndex: 0,
+                createElement: function(type, config, children) {
+                    var prop = {}, propName;
+                    config = config || {};
+                    var key = config.key || null;
+                    for(var name in config) {
+                        if (config.hasOwnProperty(name) && name != 'key')
+                        prop[name] = config[name];
+                    }
+                    var childLen = arguments.length - 2;
+                    if (childLen == 1) {
+                        prop.children = $.isArray(children) ? children : [children];
+                    } else if (childLen > 1) {
+                        var arr = new Array(childLen);
+                        for(var i = 0; i < childLen; i++) {
+                            arr[i] = arguments[i - 2];
+                        }
+                        prop.children = arr;
+                    }
+                    return new ReactElement(type, key, prop);
+                },
+                render: function(container, children) {
+                    var reactDom = ReactDom(children);
+                    var html = reactDom.render(this.nextIndex++);
+                    $(container).html(html);
+                }   
+            }
+            return React;
+        })()    
+        React.render('#app', 'nihao')
+    </script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>scroll</title>
+    <style>
+        body {
+            height: 2000px;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        function touchstart(e) {
+            console.log('touchstart', +new Date());
+        }
+        function touchmove(e) {
+            console.log('touchmove', +new Date());
+        }
+        function touchend(e) {
+            console.log('touchend', +new Date());
+        }
+        function scroll(e) {
+            console.log('scroll', +new Date());
+        }
+        document.addEventListener('touchstart', touchstart);
+        document.addEventListener('touchmove', touchmove);
+        document.addEventListener('touchend', touchend);
+        document.addEventListener('scroll', scroll);
+    </script>
+</body>
+</html>

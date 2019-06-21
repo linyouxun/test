@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>slow action</title>
+</head>
+<body>
+
+    <button onclick="clickBtn()">click</button>
+    <button onclick="clickBtn2()">slow action click</button>
+    <button onclick="clickBtn3()">slow action click</button>
+    <button onclick="debounce(clickBtn, 1000)">slow action click</button>
+
+    <script>
+
+        var clickBtn = function() {
+            console.log('click');
+        }
+        var time = null;
+        var clickBtn2 = function() {
+            if (!!time) {
+                clearTimeout(time);
+                time = null;
+            }
+            time = setTimeout(function() {
+                console.log('click2')
+            }, 1000)
+        }
+        var time2 = null;
+        var clickBtn3 = function() {
+            if (time2) return;
+            time2 = 1;
+            console.log('click3');
+            setTimeout(function() {
+                time2 = null;
+            }, 1000)
+        }
+
+        var debounce = function(func, wait) {
+            let timeout = null;
+            return function() {
+                let context = this;
+                let args = arguments;
+                if (timeout) clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    func.apply(context, args);
+                }, wait);
+            }
+        }
+
+
+        // var SlowAction = function() {
+        //     // 判空
+        //     var time = null;
+        //     return function(cb) {
+        //         if (!!time) {
+        //             clearTimeout(time);
+        //         }
+        //         time = setTimeout(function() {
+        //             cb();
+        //             clearTimeout(time);
+        //             time = null;
+        //         }, 1000);
+        //     }
+        // }
+        // var slowAction = SlowAction();
+        // var clickBtn = function() {
+        //     console.log('click');
+        // }
+        // var clickBtn2 = function() {
+        //     slowAction(function() {
+        //         console.log('click 2');
+        //     })
+        // }
+
+    </script>
+</body>
+</html>

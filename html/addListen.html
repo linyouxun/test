@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>事件</title>
+    <style>
+        .out {
+            width: 500px;
+            height: 500px;
+            background-color: lightgray;
+        }
+        .inner {
+            width: 100px;
+            height: 100px;
+            background-color: lightcoral;
+        }
+    </style>
+</head>
+<body>
+    <div class="out">
+        out
+        <div class="inner">
+            inner
+        </div>
+    </div>
+
+    <script>
+        var out = document.getElementsByClassName('out')[0];
+        var inner = document.getElementsByClassName('inner')[0];
+
+        function f1(e) {
+            console.log('f1', e)
+        }
+        function f2(e) {
+            // e.stopPropagation();
+            console.log('f2', e)
+        }
+
+        out.addEventListener('click', f1, {passive: false})
+        inner.addEventListener('click', f2, {passive: false})
+
+        // var isSupportPassive = false;
+        // var option = Object.defineProperty({}, 'passive', {
+        //     get: function() {
+        //         isSupportPassive = true;
+        //     }
+        // })
+        // window.addEventListener('test', null, option);
+        // console.log(isSupportPassive)
+
+
+
+        var isSupportPassive = false;
+        var option = Object.defineProperty({}, 'passive', {
+            get: function() {
+                isSupportPassive = true;
+            }
+        })
+        document.addEventListener('test', null, option);
+        console.log(isSupportPassive);
+
+    </script>
+</body>
+</html>

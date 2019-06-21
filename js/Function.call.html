@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>call apply bind</title>
+</head>
+<body>
+    <script>
+        function test(name, age) {
+            console.log(name, age);
+            return {name, age};
+        }
+        Function.prototype.myCall = function(context) {
+            var args = [...arguments].slice(1);
+            context = context || window;
+            context.fn = this;
+            var ret = context.fn(...args);
+            delete context.fn;
+            return ret;
+        }
+        Function.prototype.myApply = function(context) {
+            var args = arguments[1] || [];
+            context = context || window;
+            context.fn = this;
+            var ret = context.fn(...args);
+            delete context.fn;
+            return ret;
+        }
+        Function.prototype.myBind = function(context) {
+            context = context || window;
+            context.fn = this;
+            var args = [].slice.call(arguments, 1);
+            return function() {
+                var args_2 = [].slice.call(arguments);
+                args_2 = args.concat(args_2);
+                var ret = context.fn.apply(this, args_2);
+                return ret;
+            }
+        }
+
+        var d = test.call(window, 'name', 18);
+        var d2 = test.myCall(window, 'name', 18);
+        var d3 = test.apply(window);
+        var d4 = test.myApply(window);
+        var test2 = test.bind(window, 'name');
+        var d5 = new test2(18);
+        var test3 = test.myBind(window, 'name');
+        var d6 = new test3(18);
+        console.log(d, d2, d5, d6);
+    </script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>get token2</title>
+</head>
+<body>
+<!-- <script type="text/javascript" src="../js/build/init.js" ></script> -->
+<script type="text/javascript">
+(function(){
+	var queryStr = location.search.substring(1).split("&");
+	var callbackStr = "";
+	var config = {};
+	for(var i in queryStr){
+		var oneQueryStr = queryStr[i].split("=");
+		if(!callbackStr && oneQueryStr[0] == "callback"){
+			callbackStr = oneQueryStr[1];
+		}else{
+			config[oneQueryStr[0]] = oneQueryStr[1];
+		}
+	}
+	var cbSegs = callbackStr.split(".");
+
+	//parent.qq.callback函数
+	if(cbSegs[0] == "parent"){
+		parent[cbSegs[1]][cbSegs[2]](config);
+	}
+
+////////////////////////////////patch///////////////////////////
+var retData = {};
+queryStr.forEach(function (val) {
+	var ret = val.match(/(.*)\=(.*)/);
+	retData[ret[1]] = ret[2];
+});
+//qq是一个global变量
+// if(window.top.qq && window.top.qq.callback){
+// 	window.top.qq.callback(retData);
+// }else{
+// 	throw new Error('父页面没有接收QQ登录参数的函数')
+// }
+// console.log(retData,window.top.__QQ_CB);
+/////////////////////////////////////////////////////////////////
+
+})();
+</script>
+
+</body>
+</html>
