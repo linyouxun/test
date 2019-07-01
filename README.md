@@ -1,3 +1,55 @@
+### 练习 6月26下午
+1. js实现千分位
+```js
+    // 方式1
+    var toThousands = function(num) {
+        return (num || 0).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+    }
+    //方式二
+    var toThousands = function(num) {
+        return (num || 0).toLocaleString();
+    } 
+    // 方式三
+    var toThousands = function(num) {
+        num = (num || 0).toString().split('');
+        var len = num.length;
+        while(len > 3) {
+            len -= 3;
+            num.splice(len, 0, ',')
+        }
+        return num.join('')
+    }
+```
+2. promise实现(`catch`, `then`, `finally`, `all`, `race`, `done`)
+3. 网页实现圆内链接点击，圆外不能点击(mouseDown, click, touch事件的区别)
+4. `Object.defineProperty`
+5. 数据对比`NaN`,`null`,`undefined`
+6. html显示更多（不足n行适应显示，超过添加`...`）
+7. react-redux（connect方法有哪些参数，有什么作用）
+8. react hooks
+9. react componentWillMount能不能使用`this.setState`
+10. localStorage, sessionStorage, cookies的区别
+11. node实现使用数据库
+12. 首屏优化
+
+### 练习 6月26晚上
+1. 实现队列，栈
+2. h5手机屏幕适配(`rem`, `vw`)
+3. webpack去除没用代码
+4. cdn分发出错
+5. js的发挥
+6. 雪碧图，svg，base64的优缺点
+7. 跨域的实现
+8. js实现const的方式
+9. 服务器渲染
+
+
+
+
+
+
+
+
 ### 练习 6月24
 1. js与ts的区别
 >TypeScript是JavaScript 的一个超集，增加了静态类型、类、模块、接口和类型注解。在项目中更加容易查找和修复错误，适合多人协作开发，适用于中大型项目。javascript是一种轻量型的解释性脚本语言，人气大，学习曲线不那么复杂，无需特定的语言环境
