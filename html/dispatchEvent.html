@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script type="text/javascript">  
+        //document上绑定自定义事件oneating  
+        document.addEventListener('eat', function (event) {  
+            alert(event.mingzi+'，'+event.message);  
+        }, false);  
+        //创建event的对象实例。  
+        var event = document.createEvent('HTMLEvents');  
+        // 3个参数：事件类型，是否冒泡，是否阻止浏览器的默认行为  
+        event.initEvent("eat", true, true);  
+        /*属性，随便自己定义*/  
+        event.mingzi = 'hello,我是李小贱';  
+        event.message = '我今天24岁';  
+        //触发自定义事件oneating  
+        document.dispatchEvent(event);  
+    </script>
+</body>
+</html>
