@@ -1,0 +1,43 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+
+
+
+
+
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "ts-demo",
+            "program": "${workspaceFolder}\\dist\\demo.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "co test",
+            "program": "${workspaceFolder}\\koa\\co2.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "demo test",
+            "program": "${workspaceFolder}\\js\\demo.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "koa test",
+            "program": "${workspaceFolder}\\koa\\koa.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "genarator2 test",
+            "program": "${workspaceFolder}\\koa\\genarator2.js"
+        }
+    ]
+}
