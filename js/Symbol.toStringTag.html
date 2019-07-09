@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Symbol.toStringTag</title>
+</head>
+<body>
+    <script>
+        String.prototype = Object.assign(String.prototype, {
+            get [Symbol.toStringTag]() {
+                console.log('log')
+                return 'String lyx'
+            }
+        })
+        var list = [{
+            [Symbol.toStringTag]: 'Lyx'
+        }, {
+            get [Symbol.toStringTag]() {
+                return 'lyx'
+            }
+        }, null, undefined, 1, '2', false, new Date(), {}];
+        list.forEach(item => {
+            console.log(toString(item))
+        });
+        function toString(o) {
+            return Object.prototype.toString.call(o);
+        }
+    </script>
+</body>
+</html>

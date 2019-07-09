@@ -13,3 +13,7 @@ let const 块作用域 重定义及屏蔽 解构
 最简单判断该用readonly还是const的方法是看要把它做为变量使用还是做为一个属性。 做为变量使用的话用 const，若做为属性则使用readonly。***
 
 ***interface readonly [propName:string]***
+
+## 类
+修饰符：private protected public
+readonly

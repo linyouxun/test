@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Symbol.iterator</title>
+</head>
+<body>
+    <script>
+        var demoList = [1, 2, 3, 4, 5];
+        var demoObj = {
+            name: 'lyx',
+            age: 18
+        }
+        var demoSym = {
+            name: 'lyx',
+            age: 18,
+            [Symbol.iterator]: function* () {
+                var list = Object.keys(this);
+                for (let i = 0; i < list.length; i++) {
+                    yield list[i];
+                }
+            }
+        }
+        var demoSym2 = {
+            name: 'lyx',
+            age: 18,
+            [Symbol.iterator]: function () {
+                var list = Object.keys(this);
+                var index = 0;
+                return {
+                    next: function() {
+                        if (index < list.length) {
+                            return {
+                                value: list[index++],
+                                done: false
+                            }
+                        } else {
+                            return {
+                                value: undefined,
+                                done: true
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        forOf(demoList)
+        forOf(demoObj)
+        forOf(demoSym)
+        forOf(demoSym2)
+        // forIn(demoList)
+        // forIn(demoObj)
+
+        function forOf(obj) {
+            try {
+                for (const item of obj) {
+                    if (obj.hasOwnProperty(item)) {
+                        console.log({
+                            key: item,
+                            value: obj[item]
+                        });
+                    }
+                }
+            } catch (error) {
+                console.log(obj + '调用forOf失败了, 请实现Symbol.iterator')
+            }
+        }
+
+        function forIn(obj) {
+            try {
+                for (const item in obj) {
+                    if (obj.hasOwnProperty(item)) {
+                        console.log({
+                            key: item,
+                            value: obj[item]
+                        });
+                    }
+                }
+            } catch (error) {
+                console.log(obj + '调用forIn失败了')
+            }
+        }
+        
+    </script>
+</body>
+</html>

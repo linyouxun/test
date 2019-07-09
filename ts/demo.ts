@@ -1,16 +1,48 @@
-class Employee {
-    private _fullName: string;
-    get fullName() {
-        return this._fullName;
-    }
-    set fullName(name) {
-        this._fullName = name + ' test'
+function f() {
+    console.log("f(): evaluated");
+    return function (target, propertyKey: string, descriptor: PropertyDescriptor) {
+        console.log("f(): called");
     }
 }
 
-const e = new Employee();
-e.fullName = 'lyx';
-console.log(e)
+function g() {
+    console.log("g(): evaluated");
+    return function (target, propertyKey: string, descriptor: PropertyDescriptor) {
+        console.log("g(): called");
+    }
+}
+
+function sealed(constructor: Function) {
+    Object.seal(constructor);
+    Object.seal(constructor.prototype);
+}
+
+@sealed
+class C {
+    @f()
+    @g()
+    method(name) {
+        console.log(name)
+    }
+}
+
+let c = new C();
+c.method('name')
+
+
+// class Employee {
+//     private _fullName: string;
+//     get fullName() {
+//         return this._fullName;
+//     }
+//     set fullName(name) {
+//         this._fullName = name + ' test'
+//     }
+// }
+
+// const e = new Employee();
+// e.fullName = 'lyx';
+// console.log(e)
 
 // class Octpus {
 //     readonly name: string;
