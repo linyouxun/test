@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .font-marmol {
+            font-size: calc(16rem / 37.5);
+        }
+        .font-marmol2 {
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="font-marmol">
+        测试文本
+    </div>
+    <div class="font-marmol2">
+        测试文本
+    </div>
+    <script>
+        // (function(){
+        //     var fontSizeMatchDeviceWidth = function(){
+        //         var deviceWidth = document.documentElement.clientWidth || window.screen.width || 320,
+        //             devicePixelRatio = window.devicePixelRatio || 1,
+        //             fontSize = (Math.ceil(deviceWidth * 16 / 320)),
+        //             scale = 1 / devicePixelRatio; // 默认的缩放
+                    
+        //         document.documentElement.style.fontSize = fontSize + 'px';
+        //         document.querySelector('meta[name="viewport"]').setAttribute('content','width=device-width,initial-scale='+scale+',maximum-scale='+scale+',minimum-scale='+scale+',user-scalable=no,viewport-fit=cover'); // 增加viewport-fit=cover适配iphone x
+        //     };
+            
+        //     (function(){
+        //         var ua = navigator.userAgent;
+                // if(/android/i.test(ua) || /ipad|itouch|iphone/i.test(ua)|| /tianqi/i.test(ua)){
+                //     fontSizeMatchDeviceWidth();
+                // } else { // pc端优雅降级
+                //     document.documentElement.style.fontSize = '24px';
+                // }
+        //     })();
+        // })();
+
+
+        (function (doc, win) {
+            var docEl = doc.documentElement
+            var resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize'
+            var recalc = function () {
+                var devicePixelRatio = window.devicePixelRatio || 1;
+                var clientWidth = document.documentElement.clientWidth || window.screen.width;
+                var scale = 1 / devicePixelRatio; // 默认的缩放
+                if (!clientWidth) return
+                docEl.style.fontSize = (clientWidth * devicePixelRatio / 10) + 'px';
+                docEl.style.width = '100%';
+                docEl.style.height = '100%';
+                document.querySelector('meta[name="viewport"]').setAttribute('content','width=device-width,initial-scale='+scale+',maximum-scale='+scale+',minimum-scale='+scale+',user-scalable=no,viewport-fit=cover'); // 增加viewport-fit=cover适配iphone x
+                // docEl.style.overflow = 'hidden'
+            }
+            if (!doc.addEventListener) return
+            // win.addEventListener(resizeEvt, recalc, false)
+            doc.addEventListener('DOMContentLoaded', recalc, false)
+        })(document, window)
+        // (function flexible (window, document) {
+        //     var docEl = document.documentElement
+        //     var dpr = window.devicePixelRatio || 1
+
+        //     // adjust body font size
+        //     function setBodyFontSize () {
+        //         if (document.body) {
+        //         document.body.style.fontSize = (12 * dpr) + 'px'
+        //         }
+        //         else {
+        //         document.addEventListener('DOMContentLoaded', setBodyFontSize)
+        //         }
+        //     }
+        //     setBodyFontSize();
+
+        //     // set 1rem = viewWidth / 10
+        //     function setRemUnit () {
+        //         var rem = docEl.clientWidth / 10
+        //         docEl.style.fontSize = rem + 'px'
+        //     }
+
+        //     setRemUnit()
+
+        //     // reset rem unit on page resize
+        //     window.addEventListener('resize', setRemUnit)
+        //     window.addEventListener('pageshow', function (e) {
+        //         if (e.persisted) {
+        //         setRemUnit()
+        //         }
+        //     })
+
+        //     // detect 0.5px supports
+        //     if (dpr >= 2) {
+        //         var fakeBody = document.createElement('body')
+        //         var testElement = document.createElement('div')
+        //         testElement.style.border = '.5px solid transparent'
+        //         fakeBody.appendChild(testElement)
+        //         docEl.appendChild(fakeBody)
+        //         if (testElement.offsetHeight === 1) {
+        //         docEl.classList.add('hairlines')
+        //         }
+        //         docEl.removeChild(fakeBody)
+        //     }
+        //     }(window, document))
+    </script>
+</body>
+</html>
+

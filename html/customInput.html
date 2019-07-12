@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>customInput</title>
+</head>
+<body>
+    <div id="div">
+        <input type="text" id="input">
+    </div>
+    <script>
+        var value = '';
+        var divDom = document.getElementById('div');
+        var inputDom = document.getElementById('input');
+        var valueField = 'value'
+        var descriptor = Object.getOwnPropertyDescriptor(inputDom.constructor.prototype, valueField);
+        var get = descriptor.get;
+        var set = descriptor.set;
+        console.log('log')
+        // var inputObj = {value: '', level: 1};
+        var inputObj = {};
+        Object.defineProperty(inputDom, valueField, {
+            configurable: descriptor.configurable,
+            get: function() {
+                console.log('get')
+                var ret = get.call(this)
+                value = ret;
+                return ret;
+            },
+            set: function(v) {
+                console.log('set')
+                value = v
+                set.call(this, v)
+            },
+        })
+        Object.defineProperty(inputObj, valueField, {
+            configurable: descriptor.configurable,
+            enumerable: descriptor.enumerable,
+            get: function() {
+                console.log('get')
+                var ret = get.call(inputDom)
+                value = ret;
+                return ret;
+            },
+            set: function(v) {
+                console.log('set')
+                value = v
+                set.call(inputDom, v)
+            },
+        })
+        Object.defineProperty(inputDom, valueField, {
+            enumerable: descriptor.enumerable
+        })
+        function change(e) {
+            console.log(e.target.value)
+        }
+        divDom.addEventListener('change', change, false)
+        // inputDom.addEventListener('change', change, false)
+    </script>
+</body>
+</html>
