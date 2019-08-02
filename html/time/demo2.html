@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>测试html渲染</title>
+    <!-- <link rel="stylesheet" href="http://127.0.0.1:3002/css/demo2.css"> -->
+    <!-- <link rel="stylesheet" href="http://127.0.0.1:3002/css/delay-demo2.css?d=1"> -->
+
+    <link href="http://127.0.0.1:3002/css/delay-demo2.css?d=1" rel="stylesheet" media="print" onload="cssLoad(this)">
+
+</head>
+<body>
+    nihao
+    <script>
+        function cssLoad(event) {
+            event.media = 'all'
+        }
+        // var start = performance.now()
+        // while(performance.now() - start < 1000);
+        console.log('log');
+    </script>
+    <!-- <script src="http://127.0.0.1:3002/js/delay-demo2.js?d=1"></script> -->
+    <!-- <script>
+        console.log('script start');
+        var start = performance.now()
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOMContentLoaded');
+            console.log(performance.now() - start)
+        })
+        while(performance.now() - start < 1000);
+        console.log('script end')
+    </script> -->
+</body>
+</html>

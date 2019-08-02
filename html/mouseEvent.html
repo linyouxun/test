@@ -77,8 +77,8 @@
     <script>
         {
             // var event = ['click','dblclick','mousedown','mouseup','mouseover','mouseout','mousemove','mouseenter','mouseleave']
-            var event = ['click','dblclick','mousedown','mouseup']
-            // var event = ['click', 'touchstart', 'touchmove', 'touchend', 'touchcancel']
+            // var event = ['click','dblclick','mousedown','mouseup']
+            var event = ['click', 'touchstart', 'touchmove', 'touchend', 'touchcancel']
             var divDom = document.getElementById('click');
             var aDom = document.getElementById('a');
             var divModalDom = document.getElementById('modal');
@@ -86,6 +86,12 @@
             function clickEvent(e) {
                 console.log(e.type, e)
                 var x = e.x, y = e.y;
+                if (/touch/.test(e.type)) {
+                    var e2 = e.changedTouches[0];
+                    if (e2) {
+                        x = e2.clientX, y = e2.clientY;
+                    }
+                }
                 console.log(x, y);
                 if (x > 100 && x < 200 && y > 100 && y < 200) {
                     return
@@ -98,12 +104,17 @@
                 // }
             }
             for(var name in event) {
+                divDom.addEventListener(event[name], clickEvent, true);
                 divDom.addEventListener(event[name], clickEvent, false);
             }
+
+            // for(var name in event) {
+            //     divDom.addEventListener(event[name], clickEvent, true);
+            // }
             
-            aDom.addEventListener('click', function(e) {
-                console.log('a', e);
-            }, false);
+            // aDom.addEventListener('click', function(e) {
+            //     console.log('a', e);
+            // }, false);
 
             // mouseover > mouseenter > mousedown > mouseup > click > mouseout > mouseleave
         

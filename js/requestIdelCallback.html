@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>requestIdelCallback</title>
+</head>
+<body>
+    <script>
+        function A(time) {
+            time = time || 1000
+            var start = performance.now();
+            console.log('start A', start)
+            while(performance.now() - start < time);
+            console.log('end A', performance.now())
+        }
+        function B() {
+            console.log('start B', performance.now())
+            var count = 10000
+            for(var i = 0; i < 10 * count; i++);
+            // console.log('end B', performance.now())
+        }
+        var tasks = [A, B, A];
+        A(1000)
+        requestIdleCallback(myNonEssentialWork, { timeout: 2000 });
+        function myNonEssentialWork (deadline) {
+            var timeRemaining = '';
+            var didTimeout = '';
+            // 当回调函数是由于超时才得以执行的话，deadline.didTimeout为true
+            while (((timeRemaining = deadline.timeRemaining()) > 0 || (didTimeout = deadline.didTimeout)) && tasks.length > 0) {
+                console.log('requestIdelCallback start', {
+                    timeRemaining,
+                    didTimeout
+                });
+                var task = tasks.pop();
+                task();
+            }
+            if (tasks.length > 0) {
+                requestIdleCallback(myNonEssentialWork);
+            }
+        }
+
+    </script>
+</body>
+</html>

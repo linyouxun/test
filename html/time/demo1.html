@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>时间切片</title>
+</head>
+<body>
+    <button onclick="click3()">click</button>
+    <button onclick="click2()">click2</button>
+    <script>
+        function run(time) {
+            time = time || 1000;
+            var start = performance.now()
+            while(performance.now() - start < time);
+            console.log('done');
+        }
+        function click3() {
+            console.log('1')
+            run(1000)
+        }
+        function click2() {
+            console.log('2')
+            run(500)
+            setTimeout(() => {
+                run(500)
+            })
+        }
+    </script>
+</body>
+</html>
