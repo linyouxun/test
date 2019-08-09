@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>react event</title>
+</head>
+<body>
+    <div id='app'>
+        <input type="text" id='input'>
+        <input type="text" id='input2'>
+    </div>
+    <script>
+        // var app = document.getElementById('app');
+        var input = document.getElementById('input');
+        var input2 = document.getElementById('input2');
+        var inputPro = Object.getOwnPropertyDescriptor(input);
+        var inputPro2 = Object.getOwnPropertyDescriptor(input2);
+        var value = '';
+        var pro = Object.defineProperty(inputPro.constructor.prototype, 'value')
+        var pro2 = Object.defineProperty(inputPro2.constructor.prototype, 'value')
+        Object.defineProperty(inputPro.constructor.prototype, 'value', {
+            ...pro,
+            get: function(e) {
+                
+            }
+        }) 
+    </script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div {
+            height: 2000px;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" id="input">
+    <div>1</div>
+    <script>
+        var inputDom = document.getElementById('input');
+
+        function debounce(fun, delay) {
+            var timer = null;
+            return function() {
+                if (timer) {
+                    clearTimeout(timer)
+                    timer = null;
+                }
+                timer = setTimeout(() => {
+                    fun.apply(void 0, arguments)
+                    timer = null;
+                }, delay)
+            }
+        }
+        function throttle(fun, delay) {
+            var pre = new Date();
+            return function() {
+                var now = new Date();
+                if (now - pre > delay) {
+                    fun.apply(void 0, arguments);
+                    pre = new Date();
+                }
+            }
+        }
+        function trigger() {
+            console.log('trigger', arguments);
+        }
+
+        inputDom.addEventListener('keyup', throttle(trigger, 1000));
+    </script>
+</body>
+</html>

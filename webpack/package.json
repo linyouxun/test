@@ -1,0 +1,14 @@
+{
+  "name": "webpack",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "json-loader": "^0.5.7",
+    "webpack": "4.35.3"
+  },
+  "devDependencies": {
+    "webpack-cli": "^3.3.6"
+  }
+}

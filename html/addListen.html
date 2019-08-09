@@ -31,15 +31,18 @@
         var inner = document.getElementsByClassName('inner')[0];
 
         function f1(e) {
+            console.log(performance.now());
             console.log('f1', e)
         }
         function f2(e) {
+            console.log(performance.now());
             // e.stopPropagation();
             console.log('f2', e)
         }
 
         out.addEventListener('click', f1, {passive: false})
-        inner.addEventListener('click', f2, {passive: false})
+        out.addEventListener('touchstart', f1, {passive: false})
+        // inner.addEventListener('click', f2, {passive: false})
 
         // var isSupportPassive = false;
         // var option = Object.defineProperty({}, 'passive', {

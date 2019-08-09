@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+
+   <script src="./react/react.development.js"></script>
+   <script src="./react/react-dom.development.js"></script>
+   <script type='text/javascript' src="https://unpkg.com/@babel/standalone@7.5.5/babel.js"></script>
+</head>
+<body>
+
+    <div id='root' class="root">
+    </div>
+    <script type='text/babel'>
+        
+var container = document.getElementById('root');
+var {useState, useEffect, useLayoutEffect} = React;
+function Example() {
+    const [count, setCount] = useState(0);
+    const [text, setText] = useState('');
+    var a = useRef("xxx")
+    useEffect(() => {//初始函数
+      console.log(a, 'useEffect')
+       document.title = `You clicked ${count} times`;
+       return () =>{//清理函数
+        console.log(a, 'end useEffect')
+        document.title = `remove`;
+       }
+     });
+     useLayoutEffect(() => {//初始函数
+      console.log(a, 'useLayoutEffect')
+       document.title = `You clicked ${count} times`;
+       return () =>{//清理函数
+        console.log(a, 'end useLayoutEffect')
+        document.title += '!!!';
+       }
+     });
+    console.log(count, '更新Example')
+    return (
+      <quoteblock>
+        <p>You clicked {count} times</p>
+        <button onClick={() => setCount(count + 1)}>
+          Click me
+        </button>
+        <input ref={a} value={text} onChange={function(e){
+          setText(e.target.value)
+        }} />
+        <span>共{text.length}个字符</span><Child />
+      </quoteblock>
+    );
+}
+
+class App extends React.Component{
+    state = {
+      aaa: 1
+    }
+    onClick(){
+      this.setState(function(s){
+        return {
+          aaa: s.aaa +1
+        }
+      })
+    }
+    componentDidMount(){
+      console.log("app mount")
+    }
+    componentDidUpdate(){
+      console.log("app update")
+    }
+    render(){
+      return <div>{this.state.aaa < 10 ? <Example />: null}
+              <h1 onClick={this.onClick.bind(this)}>{ this.state.aaa}</h1>
+        </div>
+    }
+}
+
+class Child extends React.Component {
+    componentDidMount(){
+      console.log("Child mount")
+    }
+    componentDidUpdate(){
+      console.log("Child update")
+    }
+    render(){
+      return <span>Child</span>
+    }
+}
+ReactDOM.render(<App />, container)
+    
+    </script>
+</html>

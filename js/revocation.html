@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var operation = {
+            list: [],
+            reList: [],
+            count: 0,
+            recount: 0,
+            value: '',
+            done: function(value) {
+                this.list.push(value);
+                this.count++;
+                return this.value = value;
+            },
+            revocation: function() {
+                if (this.count) {
+                    const value = this.list.pop();
+                    this.reList.push(value);
+                    this.count--;
+                    this.recount++;
+                    return this.value = value;
+                } else {
+                    console.log('无法撤销');
+                }
+            },
+            vocation: function() {
+                if (this.recount) {
+                    const value = this.reList.pop();
+                    this.list.push(value);
+                    this.recount--;
+                    this.count++;
+                    return this.value = value;
+                } else {
+                    console.log('无法撤销');
+                }
+            },
+        }
+    </script>
+</body>
+</html>
