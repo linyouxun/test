@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title></title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+    .block {
+      overflow: hidden;
+      position: relative;
+      background-color: lightgray;
+    }
+    .block::before {
+      content: " (" attr(data-name) ")";
+      display: inline-block;
+      height: 44px;
+      line-height: 44px;
+      padding-left: 30px;
+      margin-right: -30px;
+      width: 100%;
+    }
+    .block:hover::before {
+      box-shadow: 0px 0px 4px;
+    }
+    .block > input[type='checkbox'] {
+      height: 44px;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+    .block > input[type='checkbox']:checked + .context {
+      height: 0;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+    }
+    .block .context {
+      /* margin: 30px; */
+      box-sizing: border-box;
+      background: #efefef;
+      padding: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="block" data-name='文字两端对齐'>
+    <input type="checkbox">
+    <div class="context">
+      这是例子
+    </div>
+  </div>
+</body>
+</html>

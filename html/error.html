@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script>
+      function recordResourceError() {
+        // 当浏览器不支持 window.performance.getEntries 的时候，用下边这种方式
+        window.addEventListener('error',function(e){
+          var typeName = e.target.localName;
+          var sourceUrl = "";
+          if (typeName === "link") {
+            sourceUrl = e.target.href;
+          } else if (typeName === "script" || typeName === "img") {
+            sourceUrl = e.target.src;
+          }
+
+          console.log(e, sourceUrl);
+          // var resourceLoadInfo = new ResourceLoadInfo(RESOURCE_LOAD, sourceUrl, typeName, "0");
+          // resourceLoadInfo.handleLogInfo(RESOURCE_LOAD, resourceLoadInfo);
+        }, true);
+        window.addEventListener('DOMContentLoaded', function() {
+          console.log('DOMContentLoaded', performance.getEntries())
+        })
+        window.onload = function() {
+          console.log('loaded', performance.getEntries())
+        }
+      }
+
+      recordResourceError()
+    </script>
+  <link rel="stylesheet" href="style.css">
+  <script src="./1.js"></script>
+  <script src="./js/1.js"></script>
+</head>
+<body>
+  <img src="./1.png" alt="">
+  <img src="https://static.fundebug.cn/wechat_fundebug.jpg" alt="">
+</body>
+</html>
