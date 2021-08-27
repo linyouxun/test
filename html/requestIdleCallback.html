@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>requestIdleCallback.html</title>
+</head>
+<body>
+    <script>
+        var list = [1, 2, 3, 4, 5, 6];
+        function callbackFn(idleDeadline) {
+            if (list.length) {
+                var t = performance.now()
+                while(performance.now() - t < 100);
+                var index = list.shift();
+                if (index > 3) loop()
+                console.log('done', index, performance.now())
+                window.requestIdleCallback(callbackFn);
+            } else {
+                console.log('end')
+            }
+        }
+        function loop() {
+            var t = performance.now()
+            while(performance.now() - t < 1000);
+            console.log('loop')
+        }
+        window.requestIdleCallback(callbackFn);
+    </script>
+</body>
+</html>
